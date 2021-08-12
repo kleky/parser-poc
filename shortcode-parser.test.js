@@ -3,7 +3,7 @@ const stopWatch = require('stopwatch-node').StopWatch;
 
 describe('flattens keys', () => {
 
-    test('app last', () => {
+    test('flattens params', () => {
       const results = itemParser.flattenObject({
           "action": "action",
           "params": {
@@ -82,11 +82,12 @@ describe('findDuplicates', () => {
                 "app": "app"
             }],
             totalRepeatedInList: 1,
+            processed: 2,
         });
 
     });
 
-    test('app key in different order', () => {
+    test('2 items - app key in different order', () => {
 
         const results = itemParser.findDuplicates([
             {
@@ -114,11 +115,12 @@ describe('findDuplicates', () => {
                 },
             }],
             totalRepeatedInList: 1,
+            processed: 2,
         });
 
     });
 
-    test('multiple params in different order', () => {
+    test('2 items - multiple params in different order', () => {
 
         const results = itemParser.findDuplicates([
             {
@@ -154,6 +156,7 @@ describe('findDuplicates', () => {
                 }
             ],
             totalRepeatedInList: 1,
+            processed: 2,
         });
 
     });
@@ -202,19 +205,19 @@ describe('findDuplicates', () => {
                 }
             ],
             totalRepeatedInList: 2,
+            processed: 3,
         });
 
     });
 
-    test('test file', () => {
+    test('1000 items - test file', () => {
 
         const items = require('./items.json');
         const results = itemParser.findDuplicates(items)
 
-        expect(results).toEqual({
-            repeated: [],
-            totalRepeatedInList: 0,
-        });
+        expect(results.processed).toEqual(1000);
+        expect(results.repeated.length).toEqual(25);
+        expect(results.totalRepeatedInList).toEqual(25);
 
     });
 

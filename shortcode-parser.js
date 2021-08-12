@@ -1,25 +1,31 @@
+const sort = require('fast-sort').sort;
+
 function findDuplicates(items) {
     let result = {
+        processed: 0,
         repeated: [],
         totalRepeatedInList: 0,
     }
 
     const entries = items.map(i => ({
-        original: i,
-        entries: JSON.stringify(
-            Object.entries(
-                flattenObject(i)
-            ).sort()
-        )
+        cache: i,
+        objectValue: Object
+                .entries(flattenObject(i))
+                .sort() // sort keys
+                .map(e => e[0] + e[1]) // concat key and value
+                .reduce((previousValue, currentValue) => previousValue + currentValue) // concat all key values
+
     }));
 
-    for (let i = 1; i < entries.length; i++) {
-        if (entries[i].entries === entries[i-1].entries) {
-            result.repeated.push(entries[i].original);
+    const sorted = sort(entries).asc(e => e.objectValue);
+
+    for (let i = 0; i < sorted.length - 1; i++) {
+        if (sorted[i].objectValue === sorted[i+1].objectValue) {
+            result.repeated.push(sorted[i].cache);
             result.totalRepeatedInList++;
         }
     }
-
+    result.processed = sorted.length;
     return result;
 }
 
@@ -34,8 +40,6 @@ function flattenObject(item) {
     }
     return res;
 }
-
-
 
 module.exports = {
     findDuplicates,
