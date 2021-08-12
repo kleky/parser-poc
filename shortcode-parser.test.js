@@ -1,4 +1,5 @@
 const itemParser =  require('./shortcode-parser');
+const stopWatch = require('stopwatch-node').StopWatch;
 
 describe('flattens keys', () => {
 
@@ -40,6 +41,18 @@ describe('flattens keys', () => {
 });
 
 describe('findDuplicates', () => {
+
+    let sw;
+
+    beforeEach(() => {
+        sw = new stopWatch();
+        sw.start();
+    });
+
+    afterEach(() => {
+        sw.stop();
+        console.log(sw.shortSummary());
+    });
 
     test('keys in same order', () => {
 
