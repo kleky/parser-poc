@@ -3,7 +3,7 @@ const stopWatch = require('stopwatch-node').StopWatch;
 
 describe('flattens keys', () => {
 
-    test('flattens params', () => {
+    test('1 param - flattens params into single object', () => {
       const results = itemParser.flattenObject({
           "action": "action",
           "params": {
@@ -19,7 +19,7 @@ describe('flattens keys', () => {
       });
     });
 
-    test('multiple params', () => {
+    test('multiple params - flattens params into single object', () => {
         const results = itemParser.flattenObject({
             "e": "action",
             "params": {
@@ -54,7 +54,7 @@ describe('findDuplicates', () => {
         console.log(sw.shortSummary());
     });
 
-    test('keys in same order', () => {
+    test('2 items - keys in same order finds 1 duplicate', () => {
 
         const results = itemParser.findDuplicates([
             {
@@ -82,12 +82,11 @@ describe('findDuplicates', () => {
                 "app": "app"
             }],
             totalRepeatedInList: 1,
-            processed: 2,
         });
 
     });
 
-    test('2 items - app key in different order', () => {
+    test('2 items - app key in different order - finds 1 duplicate', () => {
 
         const results = itemParser.findDuplicates([
             {
@@ -115,12 +114,11 @@ describe('findDuplicates', () => {
                 },
             }],
             totalRepeatedInList: 1,
-            processed: 2,
         });
 
     });
 
-    test('2 items - multiple params in different order', () => {
+    test('2 items - multiple params in different order - finds 1 duplicate', () => {
 
         const results = itemParser.findDuplicates([
             {
@@ -156,12 +154,11 @@ describe('findDuplicates', () => {
                 }
             ],
             totalRepeatedInList: 1,
-            processed: 2,
         });
 
     });
 
-    test('3 items - multiple params in different order', () => {
+    test('3 items - multiple params in different order - finds 2 duplicates', () => {
 
         const results = itemParser.findDuplicates([
             {
@@ -205,17 +202,16 @@ describe('findDuplicates', () => {
                 }
             ],
             totalRepeatedInList: 2,
-            processed: 3,
         });
 
     });
 
-    test('1000 items - test file', () => {
+    test('1000 items - test file - finds 25 duplicates', () => {
 
         const items = require('./items.json');
+
         const results = itemParser.findDuplicates(items)
 
-        expect(results.processed).toEqual(1000);
         expect(results.repeated.length).toEqual(25);
         expect(results.totalRepeatedInList).toEqual(25);
 
